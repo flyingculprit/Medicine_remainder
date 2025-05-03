@@ -14,15 +14,15 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 # MongoDB config
-app.config["MONGO_URI"] = "mongodb+srv://commander:LwC72c5UL8xsF5ug@cluster0.bbqab.mongodb.net/medicine_reminder"
+app.config["MONGO_URI"] = ""
 mongo = PyMongo(app)
 
 # Email config
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
 app.config["MAIL_USE_SSL"] = True
-app.config["MAIL_USERNAME"] = "cyrusbyte.in@gmail.com"
-app.config["MAIL_PASSWORD"] = "mysbesxffdzworkx"
+app.config["MAIL_USERNAME"] = "@gmail.com"
+app.config["MAIL_PASSWORD"] = ""
 mail = Mail(app)
 
 # Background scheduler
