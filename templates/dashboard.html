@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Background and overall body styling */
+        body {
+            background: url('https://i.pinimg.com/736x/f9/b2/52/f9b252519699ca72d8bb9c0ba35f7dcb.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Container for the dashboard */
+        .container {
+            max-width: 1100px;
+            background: rgba(0, 0, 0, 0.8); /* Black transparent background */
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            animation: slideIn 1s ease-out;
+        }
+
+        /* Header Styling */
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 36px;
+            color: #a15fff;
+        }
+
+        /* Card Styling for each medicine entry */
+        .card {
+            border-radius: 15px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+            background: #2a2a2a;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Card hover effect */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button hover effect */
+        .btn {
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animation for the whole page */
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animation for each medicine card */
+        @keyframes fadeInCard {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animation for each medicine card */
+        .medicine-card {
+            animation: fadeInCard 0.8s ease-out;
+        }
+
+        /* Additional Styling for buttons */
+        .btn-group button {
+            margin-right: 10px;
+        }
+
+        /* Restock button styling */
+        .input-group input {
+            max-width: 120px;
+        }
+
+        /* The "No medicines added yet" message */
+        .text-center {
+            font-size: 18px;
+            color: #a15fff;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4 animated">
+        <h2 class="text-center mb-4">Welcome to Your Dashboard</h2>
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{{ url_for('stock') }}" class="btn btn-info btn-lg">+ Add Medicine <i class="fas fa-plus-circle"></i></a>
+        </div>
+
+        {% if medicines %}
+        <div class="row">
+            {% for med in medicines %}
+            <div class="col-md-4 mb-4">
+                <div class="card medicine-card">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: white;">{{ med.medicine }}</h5>
+                        <p style="color: white;">Quantity Left: <strong>{{ med.quantity }}</strong></p>
+                        <ul class="list-unstyled" style="color: white;">
+                            {% for time, tval in med.timings.items() %}
+                            <li><strong>{{ time.title() }}:</strong> {{ tval }}</li>
+                            {% endfor %}
+                        </ul>
+
+                        {% if med.reminder_pending %}
+                        <form method="POST" action="{{ url_for('take_medicine', medicine_id=med._id) }}" class="mb-3">
+                            <label class="form-label" style="color: white;">Did you take it?</label><br>
+                            <div class="btn-group">
+                                <button name="took_medicine" value="yes" class="btn btn-success btn-sm">Yes</button>
+                                <button name="took_medicine" value="no" class="btn btn-secondary btn-sm">No</button>
+                            </div>
+                        </form>
+                        {% endif %}
+
+                        <!-- Restock button visible always -->
+                        <form method="POST" action="{{ url_for('restock', medicine_id=med._id) }}" class="mb-3">
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="restock_quantity" class="form-control" min="1" placeholder="Restock quantity" required>
+                                <button type="submit" class="btn btn-primary">Restock</button>
+                            </div>
+                        </form>
+
+                        {% if med.quantity == 0 %}
+                        <a href="{{ url_for('delete_medicine', medicine_id=med._id) }}" class="btn btn-danger btn-sm">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center">No medicines added yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap 5 and FontAwesome JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
