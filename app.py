@@ -19,8 +19,7 @@ app.secret_key = os.urandom(24)
 # ---------- MongoDB config ----------
 # NOTE: make sure the database name is included at the end of the URI
 app.config["MONGO_URI"] = (
-    "mongodb+srv://projects_db_user:7OplfCEQzwTYtGVj@"
-    "cluster0.9rnnjwt.mongodb.net/medicine_reminder"
+
 )
 mongo = PyMongo(app)
 
@@ -30,8 +29,8 @@ app.config.update(
     MAIL_SERVER="smtp.gmail.com",
     MAIL_PORT=465,
     MAIL_USE_SSL=True,
-    MAIL_USERNAME="cyrusbyte.in@gmail.com",
-    MAIL_PASSWORD="mysbesxffdzworkx",   # Gmail app password
+    MAIL_USERNAME="",
+    MAIL_PASSWORD="",   # Gmail app password
 )
 mail = Mail(app)
 
