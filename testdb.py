@@ -5,7 +5,7 @@ from pymongo.errors import ConnectionFailure
 app = Flask(__name__)
 
 # Replace this URI with your actual connection string
-app.config["MONGO_URI"] = "mongodb+srv://projects_db_user:7OplfCEQzwTYtGVj@cluster0.9rnnjwt.mongodb.net/"
+app.config["MONGO_URI"] = ""
 mongo = PyMongo(app)
 
 try:
